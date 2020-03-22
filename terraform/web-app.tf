@@ -13,3 +13,10 @@ resource "azurerm_app_service_plan" "app-service-plan" {
         size = "B1"
     }
 }
+
+resource "azurerm_app_service" "app-service" {
+  name = "MX-WebApp-${var.environment}"
+  location = "${var.region}"
+  resource_group_name = "${azurerm_resource_group.resource-group.name}"
+  app_service_plan_id = "${azurerm_app_service_plan.app-service-plan.id}"
+}
