@@ -94,7 +94,7 @@ stages:
             displayName: 'Azure App Service Deploy: MX-WebApp-$(environment)'
             inputs:
               azureSubscription: '$(AzSubscription)'
-              WebAppName: 'mx-web-app-$(environment)'
+              WebAppName: 'web-app-$(environment)'
               deployToSlotOrASE: true
               ResourceGroupName: 'mx-web-$(environment)'
               packageForLinux: '$(Pipeline.Workspace)/webapp/MX.Web.zip'
