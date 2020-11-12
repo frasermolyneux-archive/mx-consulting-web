@@ -1,43 +1,61 @@
 trigger:
-- master
+  branches:
+    include:
+    - '*'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
+  TerraformVersion: '0.13.0'
+  AzTerraformRegion: 'uksouth'
+  AzTerraformResourceGroup: 'mx-web-terraform'
+  AzTerraformStorageAccount: 'mxwebtfstate'
+  AzSubscription: 'MX-Pay-As-You-Go'
 
-steps:
-- task: NuGetToolInstaller@1
+stages:
+- stage: build
+  jobs:
+  - job: build
+    pool:
+      vmImage: 'windows-latest'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/*.csproj'
-    feedsToUse: 'select'
+    variables:
+      solution: '**/*.sln'
+      buildPlatform: 'Any CPU'
+      buildConfiguration: 'Release'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: '**/*.csproj'
+    steps:
+    - task: NuGetToolInstaller@1
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
 
-- task: CopyFiles@2
-  displayName: "Copy terraform to artifact staging directory"
-  inputs: 
-    SourceFolder: '$(Build.SourcesDirectory)/terraform'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/terraform'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathToPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: true
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.artifactStagingDirectory)/webapp'
+
+    - task: CopyFiles@2
+      displayName: 'Copy terraform folder into staging directory'
+      inputs: 
+        SourceFolder: '$(Build.sourcesDirectory)/terraform'
+        Contents: '**'
+        TargetFolder: '$(Build.artifactStagingDirectory)/terraform'
+
+    - publish: $(Build.artifactStagingDirectory)/terraform
+      displayName: Publish terraform artifact
+      artifact: terraform
+
+    - publish: '$(Build.artifactStagingDirectory)/webapp'
+      displayName: 'Publish website source artifact'
+      artifact: webapp
