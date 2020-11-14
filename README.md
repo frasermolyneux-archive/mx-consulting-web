@@ -4,8 +4,10 @@ A simple brochure website for Molyneux Consulting Ltd showcasing my offerings as
 
 ## Build Status
 
-[![Build Status](https://dev.azure.com/frasermolyneux/MX-Consulting/_apis/build/status/frasermolyneux.MX.Web?branchName=master)](https://dev.azure.com/frasermolyneux/MX-Consulting/_build/latest?definitionId=87&branchName=master)
+[![Build Status](https://dev.azure.com/frasermolyneux/MX-Consulting/_apis/build/status/frasermolyneux.MX.Web?branchName=master&stageName=build)](https://dev.azure.com/frasermolyneux/MX-Consulting/_build/latest?definitionId=101&branchName=master)
 
 ## Deployment Status
 
-[https://mx-consulting.co.uk/](https://mx-consulting.co.uk/) - [![Deployment status](https://vsrm.dev.azure.com/frasermolyneux/_apis/public/Release/badge/710cdcc9-6eb7-40de-adfe-d5c82bc31941/1/1)](https://mx-consulting.co.uk/)
+Terraform State - [![Build Status](https://dev.azure.com/frasermolyneux/MX-Consulting/_apis/build/status/frasermolyneux.MX.Web?branchName=master&stageName=terraform_state_backend)](https://dev.azure.com/frasermolyneux/MX-Consulting/_build/latest?definitionId=101&branchName=master)
+
+Draco - [![Build Status](https://dev.azure.com/frasermolyneux/MX-Consulting/_apis/build/status/frasermolyneux.MX.Web?branchName=master&stageName=draco)](https://dev.azure.com/frasermolyneux/MX-Consulting/_build/latest?definitionId=101&branchName=master)
