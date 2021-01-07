@@ -28,22 +28,19 @@ stages:
     steps:
     - task: NuGetToolInstaller@1
 
-    - task: DotNetCoreCLI@2
+    - task: NuGetCommand@2
       inputs:
+        restoreSolution: '$(solution)'
         command: 'restore'
-        projects: '**/*.csproj'
-        feedsToUse: 'select'
+        feedsToUse: 'config'
+        nugetConfigPath: './src/nuget.config'
 
-    - task: DotNetCoreCLI@2
+    - task: VSBuild@1
       inputs:
-        command: 'build'
-        projects: '**/*.csproj'
-
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'publish'
-        publishWebProjects: true
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.artifactStagingDirectory)/webapp'
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)/webapp"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
     - task: CopyFiles@2
       displayName: 'Copy terraform folder into staging directory'
