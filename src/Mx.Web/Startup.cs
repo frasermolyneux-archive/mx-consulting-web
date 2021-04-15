@@ -1,5 +1,8 @@
+using CMCS.Common.WebUtilities.Objects;
+using CMCS.Common.WebUtilities.RedirectRules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +20,7 @@ namespace Mx.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.Configure<UrlConfig>(Configuration.GetSection("UrlConfig"));
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
@@ -34,6 +37,11 @@ namespace Mx.Web
             }
 
             app.UseHttpsRedirection();
+
+            var options = new RewriteOptions();
+            options.Add(new RedirectToLowerCaseRule());
+            app.UseRewriter(options);
+
             app.UseStaticFiles();
 
             app.UseRouting();
