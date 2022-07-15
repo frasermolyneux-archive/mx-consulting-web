@@ -1,14 +1,17 @@
 ﻿using System.Diagnostics;
 using System.IO;
+
 using CMCS.Common.WebUtilities.Objects;
 using CMCS.Common.WebUtilities.Services;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Mx.Web.Models;
 
-namespace Mx.Web.Controllers
+using Mx.WebApp.Models;
+
+namespace Mx.WebApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -36,7 +39,7 @@ namespace Mx.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [Route("sitemap.xml")]

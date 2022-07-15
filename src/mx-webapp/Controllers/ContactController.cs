@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Mx.Web.Controllers
+namespace Mx.WebApp.Controllers
 {
     public class ContactController : Controller
     {

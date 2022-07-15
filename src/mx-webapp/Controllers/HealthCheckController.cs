@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Mx.Web.Controllers
+namespace Mx.WebApp.Controllers
 {
     [AllowAnonymous]
     public class HealthCheckController : Controller
@@ -14,7 +15,7 @@ namespace Mx.Web.Controllers
 
         public HealthCheckController()
         {
-            
+
         }
 
         [HttpGet]

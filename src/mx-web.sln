@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29609.76
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.Web", "Mx.Web\Mx.Web.csproj", "{32085CE3-031E-492D-AEA5-F0BF6AECA605}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5365EE0C-E6CB-4CC7-8E4D-388E49BCEEB3}"
 	ProjectSection(SolutionItems) = preProject
 		nuget.config = nuget.config
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.WebApp", "mx-webapp\Mx.WebApp.csproj", "{00C5FA4E-6FE8-484E-92EB-E7359DC0727F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +16,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{32085CE3-031E-492D-AEA5-F0BF6AECA605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{32085CE3-031E-492D-AEA5-F0BF6AECA605}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32085CE3-031E-492D-AEA5-F0BF6AECA605}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32085CE3-031E-492D-AEA5-F0BF6AECA605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00C5FA4E-6FE8-484E-92EB-E7359DC0727F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00C5FA4E-6FE8-484E-92EB-E7359DC0727F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00C5FA4E-6FE8-484E-92EB-E7359DC0727F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00C5FA4E-6FE8-484E-92EB-E7359DC0727F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
