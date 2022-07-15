@@ -1,3 +1,8 @@
+parameters:
+- name: skipBicepValidate
+  type: boolean
+  default: false
+
 trigger:
   branches:
     include:
@@ -48,10 +53,13 @@ stages:
               --location 'uksouth' `
               --parameters @params/platform.prd.json
 
-            az deployment group validate `
-              --resource-group 'rg-mxconsulting-prd-uksouth' `
-              --template-file bicep/services.bicep `
-              --parameters @params/services.prd.json
+            if ('${{ parameters.skipBicepValidate }}' -eq $false)
+            {
+              az deployment group validate `
+                --resource-group 'rg-mxconsulting-prd-uksouth' `
+                --template-file bicep/services.bicep `
+                --parameters @params/services.prd.json
+            }
 
       - task: AzureCLI@2
         name: RunWhatIfDeploy
@@ -66,7 +74,10 @@ stages:
               --location 'uksouth' `
               --parameters @params/platform.prd.json
 
-            az deployment group what-if `
-              --resource-group 'rg-mxconsulting-prd-uksouth' `
-              --template-file bicep/services.bicep `
-              --parameters @params/services.prd.json
+            if ('${{ parameters.skipBicepValidate }}' -eq $false)
+            {
+              az deployment group what-if `
+                --resource-group 'rg-mxconsulting-prd-uksouth' `
+                --template-file bicep/services.bicep `
+                --parameters @params/services.prd.json
+            }
