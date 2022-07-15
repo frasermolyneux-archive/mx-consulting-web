@@ -20,11 +20,11 @@ param parAppServicePlanName string
 param parTags object
 
 // Variables
-var varWorkloadName = 'webapp-geolocation-public-${parEnvironment}'
+var varWorkloadName = 'webapp-mxconsulting-${parEnvironment}'
 
 // Module Resources
-module webApp 'consultingWebApp/webApp.bicep' = {
-  name: 'publicWebApp'
+module consultingWebApp 'consultingWebApp/webApp.bicep' = {
+  name: 'consultingWebApp'
   scope: resourceGroup(parStrategicServicesSubscriptionId, parWebAppsResourceGroupName)
 
   params: {
@@ -40,16 +40,16 @@ module webApp 'consultingWebApp/webApp.bicep' = {
 }
 
 module webAppKeyVaultAccessPolicy './../modules/keyVaultAccessPolicy.bicep' = {
-  name: 'publicWebAppKeyVaultAccessPolicy'
+  name: 'consultingWebAppKeyVaultAccessPolicy'
 
   params: {
     parKeyVaultName: parKeyVaultName
-    parPrincipalId: webApp.outputs.outWebAppIdentityPrincipalId
+    parPrincipalId: consultingWebApp.outputs.outWebAppIdentityPrincipalId
   }
 }
 
 module frontDoorEndpoint './../modules/frontDoorEndpoint.bicep' = {
-  name: 'publicWebAppFrontDoorEndpoint'
+  name: 'consultingWebAppFrontDoorEndpoint'
   scope: resourceGroup(parConnectivitySubscriptionId, parFrontDoorResourceGroupName)
 
   params: {
@@ -57,7 +57,7 @@ module frontDoorEndpoint './../modules/frontDoorEndpoint.bicep' = {
     parParentDnsName: parParentDnsName
     parDnsResourceGroupName: parDnsResourceGroupName
     parWorkloadName: varWorkloadName
-    parOriginHostName: webApp.outputs.outWebAppDefaultHostName
+    parOriginHostName: consultingWebApp.outputs.outWebAppDefaultHostName
     parDnsZoneHostnamePrefix: parPublicWebAppDnsPrefix
     parCustomHostname: '${parPublicWebAppDnsPrefix}.${parParentDnsName}'
     parTags: parTags
