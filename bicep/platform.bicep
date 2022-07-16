@@ -11,6 +11,7 @@ param parLoggingWorkspaceName string
 param parTags object
 
 // Variables
+var varDeploymentPrefix = 'mxConsultingPlatform' //Prevent deployment naming conflicts
 var varResourceGroupName = 'rg-mxconsulting-${parEnvironment}-${parLocation}'
 var varKeyVaultName = 'kv-mxcon-${parEnvironment}-${parLocation}'
 var varAppInsightsName = 'ai-mxconsulting-${parEnvironment}-${parLocation}'
@@ -25,7 +26,7 @@ resource defaultResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = 
 }
 
 module keyVault 'modules/keyVault.bicep' = {
-  name: 'keyVault'
+  name: '${varDeploymentPrefix}-keyVault'
   scope: resourceGroup(defaultResourceGroup.name)
   params: {
     parKeyVaultName: varKeyVaultName
@@ -35,7 +36,7 @@ module keyVault 'modules/keyVault.bicep' = {
 }
 
 module appInsights 'modules/appInsights.bicep' = {
-  name: 'appInsights'
+  name: '${varDeploymentPrefix}-appInsights'
   scope: resourceGroup(defaultResourceGroup.name)
   params: {
     parAppInsightsName: varAppInsightsName

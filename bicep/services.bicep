@@ -18,11 +18,12 @@ param parAppServicePlanName string
 param parTags object
 
 // Variables
+var varDeploymentPrefix = 'mxConsultingServices' //Prevent deployment naming conflicts
 var varKeyVaultName = 'kv-mxcon-${parEnvironment}-${parLocation}'
 var varAppInsightsName = 'ai-mxconsulting-${parEnvironment}-${parLocation}'
 
-module webApp 'services/consultingWebApp.bicep' = {
-  name: 'consultingWebApp'
+module consultingWebApp 'services/consultingWebApp.bicep' = {
+  name: '${varDeploymentPrefix}-consultingWebApp'
 
   params: {
     parLocation: parLocation
