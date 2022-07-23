@@ -6,7 +6,10 @@ resources:
   pipelines:
   - pipeline: mx-consulting-web.Validate
     source: mx-consulting-web.Validate
-    trigger: true
+    trigger:
+      branches:
+        include:
+        - main
 
 stages: 
 - stage: Build
@@ -19,35 +22,47 @@ stages:
 
 - stage: DeployPrdPlatform
   jobs:
-  - job: DeployPrdPlatformBicep
-    steps:
-      - task: AzureCLI@2
-        displayName: DeployPrdPlatformBicep
-        inputs:
-          azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
-          scriptType: 'pscore'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az deployment sub create `
-              --template-file bicep/platform.bicep `
-              --location 'uksouth' `
-              --parameters @params/platform.prd.json
+
+  - deployment: DeployPrdPlatformBicep
+    environment: 'mx-consulting-prd'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureCLI@2
+              displayName: DeployPrdPlatformBicep
+              inputs:
+                azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create `
+                    --template-file bicep/platform.bicep `
+                    --location 'uksouth' `
+                    --parameters @params/platform.prd.json
 
 - stage: DeployPrdServices
   jobs:
-  - job: DeployPrdServicesBicep
-    steps:
-      - task: AzureCLI@2
-        displayName: DeployPrdServicesBicep
-        inputs:
-          azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
-          scriptType: 'pscore'
-          scriptLocation: 'inlineScript'
-          inlineScript: |
-            az deployment group create `
-              --resource-group 'rg-mxconsulting-prd-uksouth' `
-              --template-file bicep/services.bicep `
-              --parameters @params/services.prd.json
+
+  - deployment: DeployPrdServicesBicep
+    environment: 'mx-consulting-prd'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureCLI@2
+              displayName: DeployPrdServicesBicep
+              inputs:
+                azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment group create `
+                    --resource-group 'rg-mxconsulting-prd-uksouth' `
+                    --template-file bicep/services.bicep `
+                    --parameters @params/services.prd.json
 
   - template: templates/deploy-web-app.yml
     parameters:
