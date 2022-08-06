@@ -12,7 +12,7 @@ stages:
 - stage: Deploy${{ parameters.environmentFriendlyName }}
   jobs:
   - deployment: Deploy${{ parameters.environmentFriendlyName }}PlatformBicep
-    environment: 'platform-monitoring-${{ parameters.environment }}'
+    environment: 'mx-consulting-${{ parameters.environment }}'
 
     workspace:
       clean: all
@@ -37,7 +37,7 @@ stages:
 
   - deployment: Deploy${{ parameters.environmentFriendlyName }}ServicesBicep
     dependsOn: ['Deploy${{ parameters.environmentFriendlyName }}PlatformBicep']
-    environment: 'platform-monitoring-${{ parameters.environment }}'
+    environment: 'mx-consulting-${{ parameters.environment }}'
 
     strategy:
       runOnce:
