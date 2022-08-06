@@ -54,9 +54,9 @@ stages:
       jobName: 'BicepLinter'
       azureSubscription: 'spn-ado-Personal-Public-devtest'
 
-  - template: templates/deploy-environment.yml
-    parameters:
-      azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
-      webAppsAzureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd-webapps'
-      environmentFriendlyName: 'Prd'
-      environment: 'prd'
+- template: templates/deploy-environment.yml
+  parameters:
+    azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
+    webAppsAzureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd-webapps'
+    environmentFriendlyName: 'Prd'
+    environment: 'prd'
