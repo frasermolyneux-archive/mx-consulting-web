@@ -1,0 +1,68 @@
+parameters:
+- name: azureSubscription
+  type: string
+- name: webAppsAzureSubscription
+  type: string
+- name: environmentFriendlyName
+  type: string
+- name: environment
+  type: string
+
+stages:
+- stage: Deploy${{ parameters.environmentFriendlyName }}
+  jobs:
+  - deployment: Deploy${{ parameters.environmentFriendlyName }}PlatformBicep
+    environment: 'platform-monitoring-${{ parameters.environment }}'
+
+    workspace:
+      clean: all
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+
+            - task: AzureCLI@2
+              displayName: Deploy${{ parameters.environmentFriendlyName }}PlatformBicep
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create `
+                    --template-file bicep/platform.bicep `
+                    --location 'uksouth' `
+                    --parameters @params/platform.${{ parameters.environment }}.json
+
+  - deployment: Deploy${{ parameters.environmentFriendlyName }}ServicesBicep
+    dependsOn: ['Deploy${{ parameters.environmentFriendlyName }}PlatformBicep']
+    environment: 'platform-monitoring-${{ parameters.environment }}'
+
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            
+            - task: AzureCLI@2
+              displayName: Deploy${{ parameters.environmentFriendlyName }}ServicesBicep
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'pscore'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment group create `
+                    --resource-group 'rg-mxconsulting-${{ parameters.environment }}-uksouth' `
+                    --template-file bicep/services.bicep `
+                    --parameters @params/services.${{ parameters.environment }}.json
+
+  - template: jobs/deploy-web-app.yml@ado-pipeline-templates
+    parameters:
+      dependsOn: ['Deploy${{ parameters.environmentFriendlyName }}ServicesBicep']
+      environment: 'platform-webapps-${{ parameters.environment }}-uksouth'
+      projectName: mx-webapp
+      jobName: DeployWebApp
+      webAppName: 'webapp-mxconsulting-${{ parameters.environment }}-uksouth'
+      webAppNameResourceGroup: 'rg-platform-webapps-${{ parameters.environment }}-uksouth'
+      subscription: ${{ parameters.webAppsAzureSubscription }}

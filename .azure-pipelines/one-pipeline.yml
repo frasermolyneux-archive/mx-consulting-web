@@ -1,0 +1,62 @@
+trigger:
+  branches:
+    include:
+    - '*'
+    exclude:
+    - 'docs/*'
+
+pr:
+  branches:
+    include:
+    - '*'
+    exclude:
+    - 'docs/*'
+
+pool: 'Dedicated'
+
+resources:
+  repositories:
+    - repository: ado-pipeline-templates
+      type: github
+      name: frasermolyneux/ado-pipeline-templates
+      endpoint: github.com_frasermolyneux
+
+variables:
+  buildConfiguration: 'Release'
+
+stages: 
+- stage: Build
+  jobs:
+  - template: jobs/dependency-check.yml@ado-pipeline-templates
+    parameters: 
+      jobName: 'DependencyCheck'
+      failOnCVSS: 4
+
+  - template: jobs/build-net-core-projects.yml@ado-pipeline-templates
+    parameters: 
+      jobName: 'BuildNetCoreProjects'
+      buildConfiguration: $(buildConfiguration)
+      additionalBuildSteps:
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish mx-webapp project'
+        inputs:
+          command: 'publish'
+          publishWebProjects: false
+          projects: '**/mx-webapp.csproj'
+          arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/mx-webapp.zip'
+      additionalPublishSteps: 
+      - publish: '$(Build.artifactStagingDirectory)/mx-webapp.zip'
+        displayName: 'Publish mx-webapp artifact'
+        artifact: mx-webapp
+
+  - template: jobs/bicep-lint-code.yml@ado-pipeline-templates
+    parameters: 
+      jobName: 'BicepLinter'
+      azureSubscription: 'spn-ado-Personal-Public-devtest'
+
+  - template: templates/deploy-environment.yml
+    parameters:
+      azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
+      webAppsAzureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd-webapps'
+      environmentFriendlyName: 'Prd'
+      environment: 'prd'
