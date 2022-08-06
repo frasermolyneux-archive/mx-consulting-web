@@ -39,14 +39,14 @@ jobs:
                 az deployment sub validate `
                   --template-file bicep/platform.bicep `
                   --location 'uksouth' `
-                  --parameters @params/platform.${{ parameters.environmentTagLower }}.json
+                  --parameters @params/platform.$(environmentTagLower).json
 
-                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth') -eq $true) { 
-                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' exists"
+                if ((az group exists --name 'rg-mxconsulting-$(environmentTagLower)-uksouth') -eq $true) { 
+                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-$(environmentTagLower)-uksouth' exists"
                   az deployment group validate `
-                    --resource-group 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' `
+                    --resource-group 'rg-mxconsulting-$(environmentTagLower)-uksouth' `
                     --template-file $(Build.sourcesDirectory)/bicep/services.bicep `
-                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environmentTagLower }}.json
+                    --parameters @$(Build.sourcesDirectory)/params/services.$(environmentTagLower).json
                 }
 
           - task: AzureCLI@2
@@ -59,12 +59,12 @@ jobs:
                 az deployment sub what-if `
                   --template-file bicep/platform.bicep `
                   --location 'uksouth' `
-                  --parameters @params/platform.${{ parameters.environmentTagLower }}.json
+                  --parameters @params/platform.$(environmentTagLower).json
 
-                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth') -eq $true) { 
-                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' exists"
+                if ((az group exists --name 'rg-mxconsulting-$(environmentTagLower)-uksouth') -eq $true) { 
+                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-$(environmentTagLower)-uksouth' exists"
                   az deployment group what-if `
-                    --resource-group 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' `
+                    --resource-group 'rg-mxconsulting-$(environmentTagLower)-uksouth' `
                     --template-file $(Build.sourcesDirectory)/bicep/services.bicep `
-                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environmentTagLower }}.json
+                    --parameters @$(Build.sourcesDirectory)/params/services.$(environmentTagLower).json
                 }
