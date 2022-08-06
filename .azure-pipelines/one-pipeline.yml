@@ -65,5 +65,4 @@ stages:
   parameters:
     azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
     webAppsAzureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd-webapps'
-    environmentFriendlyName: 'Prd'
-    environment: 'prd'
+    environment: 'Prd'
