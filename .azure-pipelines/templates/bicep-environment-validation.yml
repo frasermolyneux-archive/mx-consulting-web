@@ -7,16 +7,21 @@ parameters:
   default: []
 - name: azureSubscription
   type: string
+- name: environmentTag
+  type: string
 - name: environment
   type: string
 
 jobs:
-- deployment: ${{ parameters.jobName }}
+- deployment: ValidateBicepAgainst${{ parameters.environmentTag }}Environment
   dependsOn: ${{ parameters.dependsOn }}
-  environment: 'mx-consulting-${{ parameters.environment }}'
+  environment: ${{ parameters.environment }}
 
   workspace:
     clean: all
+
+  variables:
+    environmentTagLower: ${{ lower(parameters.environmentTag) }}
 
   strategy:
     runOnce:
@@ -34,14 +39,14 @@ jobs:
                 az deployment sub validate `
                   --template-file bicep/platform.bicep `
                   --location 'uksouth' `
-                  --parameters @params/platform.${{ parameters.environment }}.json
+                  --parameters @params/platform.${{ parameters.environmentTagLower }}.json
 
-                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environment }}-uksouth') -eq $true) { 
-                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environment }}-uksouth' exists"
+                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth') -eq $true) { 
+                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' exists"
                   az deployment group validate `
-                    --resource-group 'rg-mxconsulting-${{ parameters.environment }}-uksouth' `
+                    --resource-group 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' `
                     --template-file $(Build.sourcesDirectory)/bicep/services.bicep `
-                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environment }}.json
+                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environmentTagLower }}.json
                 }
 
           - task: AzureCLI@2
@@ -54,12 +59,12 @@ jobs:
                 az deployment sub what-if `
                   --template-file bicep/platform.bicep `
                   --location 'uksouth' `
-                  --parameters @params/platform.${{ parameters.environment }}.json
+                  --parameters @params/platform.${{ parameters.environmentTagLower }}.json
 
-                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environment }}-uksouth') -eq $true) { 
-                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environment }}-uksouth' exists"
+                if ((az group exists --name 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth') -eq $true) { 
+                  Write-Host "Performing az deployment group validation as 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' exists"
                   az deployment group what-if `
-                    --resource-group 'rg-mxconsulting-${{ parameters.environment }}-uksouth' `
+                    --resource-group 'rg-mxconsulting-${{ parameters.environmentTagLower }}-uksouth' `
                     --template-file $(Build.sourcesDirectory)/bicep/services.bicep `
-                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environment }}.json
+                    --parameters @$(Build.sourcesDirectory)/params/services.${{ parameters.environmentTagLower }}.json
                 }
