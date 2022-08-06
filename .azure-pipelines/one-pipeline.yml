@@ -58,7 +58,7 @@ stages:
     parameters:
       dependsOn: [BicepLinter]
       jobName: 'ValidateBicepAgainstPrdEnvironment'
-      azureSubscription: 'spn-ado-Personal-Public-geolocation-prd'
+      azureSubscription: 'spn-ado-Personal-Public-mx-consulting-prd'
       environment: 'prd'
 
 - template: templates/deploy-environment.yml
