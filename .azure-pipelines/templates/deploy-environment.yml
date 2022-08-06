@@ -6,11 +6,12 @@ parameters:
 - name: environment
   type: string
 
-variables:
-  environmentLower: ${{ lower(${{ parameters.environment }}) }}
-
 stages:
 - stage: Deploy$({{ parameters.environment }})
+
+  variables:
+    environmentLower: ${{ lower(${{ parameters.environment }}) }}
+
   jobs:
   - deployment: Deploy${{ parameters.environment }}PlatformBicep
     environment: 'mx-consulting-$(environment)'
