@@ -7,14 +7,14 @@ parameters:
   type: string
 
 stages:
-- stage: Deploy$({{ parameters.environment }})
+- stage: Deploy${{ parameters.environment }}
 
   variables:
     environmentLower: ${{ lower(parameters.environment) }}
 
   jobs:
   - deployment: Deploy${{ parameters.environment }}PlatformBicep
-    environment: 'mx-consulting-$(environment)'
+    environment: 'mx-consulting-$(environmentLower)'
 
     workspace:
       clean: all
@@ -39,7 +39,7 @@ stages:
 
   - deployment: Deploy${{ parameters.environment }}ServicesBicep
     dependsOn: ['Deploy${{ parameters.environment }}PlatformBicep']
-    environment: 'mx-consulting-$(environment)'
+    environment: 'mx-consulting-$(environmentLower)'
 
     strategy:
       runOnce:
