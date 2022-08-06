@@ -14,7 +14,7 @@ stages:
 
   jobs:
   - deployment: Deploy${{ parameters.environment }}PlatformBicep
-    environment: 'mx-consulting-$(environmentLower)'
+    environment: 'mx-consulting-${{ environmentLower }}'
 
     workspace:
       clean: all
@@ -39,7 +39,7 @@ stages:
 
   - deployment: Deploy${{ parameters.environment }}ServicesBicep
     dependsOn: ['Deploy${{ parameters.environment }}PlatformBicep']
-    environment: 'mx-consulting-$(environmentLower)'
+    environment: 'mx-consulting-${{ environmentLower }}'
 
     strategy:
       runOnce:
