@@ -10,7 +10,7 @@ stages:
 - stage: Deploy$({{ parameters.environment }})
 
   variables:
-    environmentLower: ${{ lower(${{ parameters.environment }}) }}
+    environmentLower: ${{ lower(parameters.environment) }}
 
   jobs:
   - deployment: Deploy${{ parameters.environment }}PlatformBicep
