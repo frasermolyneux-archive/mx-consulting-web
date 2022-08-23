@@ -40,7 +40,7 @@ module webApp 'consultingWebApp/webApp.bicep' = {
   }
 }
 
-module keyVaultAccessPolicy './../modules/keyVaultAccessPolicy.bicep' = {
+module keyVaultAccessPolicy 'br:acrmxplatformprduksouth.azurecr.io/bicep/modules/keyvaultaccesspolicy:latest' = {
   name: '${varDeploymentPrefix}-keyVaultAccessPolicy'
 
   params: {
@@ -49,7 +49,7 @@ module keyVaultAccessPolicy './../modules/keyVaultAccessPolicy.bicep' = {
   }
 }
 
-module frontDoorEndpoint './../modules/frontDoorEndpoint.bicep' = {
+module frontDoorEndpoint 'br:acrmxplatformprduksouth.azurecr.io/bicep/modules/frontdoorendpoint:latest' = {
   name: '${varDeploymentPrefix}-frontDoorEndpoint'
   scope: resourceGroup(parConnectivitySubscriptionId, parFrontDoorResourceGroupName)
 

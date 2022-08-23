@@ -38,10 +38,13 @@ stages:
                 scriptType: 'pscore'
                 scriptLocation: 'inlineScript'
                 inlineScript: |
+                  if ($null -eq (az keyvault show --name 'kv-mxcon-${{ parameters.environmentTag }}-uksouth')) { $keyVaultCreateMode = 'default' } else { $keyVaultCreateMode = 'recover' }
+
                   az deployment sub create `
                     --template-file bicep/platform.bicep `
                     --location 'uksouth' `
-                    --parameters @params/platform.${{ parameters.environmentTag }}.json
+                    --parameters @params/platform.${{ parameters.environmentTag }}.json `
+                      parKeyVaultCreateMode=$keyVaultCreateMode
 
   - deployment: Deploy${{ parameters.environmentName }}ServicesBicep
     dependsOn: ['Deploy${{ parameters.environmentName }}PlatformBicep']

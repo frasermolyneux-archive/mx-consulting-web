@@ -8,6 +8,8 @@ param parLoggingSubscriptionId string
 param parLoggingResourceGroupName string
 param parLoggingWorkspaceName string
 
+param parKeyVaultCreateMode string = 'recover'
+
 param parTags object
 
 // Variables
@@ -25,19 +27,24 @@ resource defaultResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = 
   properties: {}
 }
 
-module keyVault 'modules/keyVault.bicep' = {
+module keyVault 'br:acrmxplatformprduksouth.azurecr.io/bicep/modules/keyvault:latest' = {
   name: '${varDeploymentPrefix}-keyVault'
   scope: resourceGroup(defaultResourceGroup.name)
+
   params: {
     parKeyVaultName: varKeyVaultName
     parLocation: parLocation
+
+    parKeyVaultCreateMode: parKeyVaultCreateMode
+
     parTags: parTags
   }
 }
 
-module appInsights 'modules/appInsights.bicep' = {
+module appInsights 'br:acrmxplatformprduksouth.azurecr.io/bicep/modules/appinsights:latest' = {
   name: '${varDeploymentPrefix}-appInsights'
   scope: resourceGroup(defaultResourceGroup.name)
+
   params: {
     parAppInsightsName: varAppInsightsName
     parKeyVaultName: keyVault.outputs.outKeyVaultName
